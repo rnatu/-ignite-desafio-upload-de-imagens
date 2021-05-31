@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Button, Box } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { useInfiniteQuery } from 'react-query';
@@ -31,11 +32,19 @@ export default function Home(): JSX.Element {
 
   const formattedData = useMemo(() => {
     // TODO FORMAT AND FLAT DATA ARRAY
+    const dataProcessing = data?.pages.map((page => page.data)).flat();
+    return dataProcessing;
   }, [data]);
 
   // TODO RENDER LOADING SCREEN
+  if(isLoading) {
+    return <Loading />
+  }
 
   // TODO RENDER ERROR SCREEN
+  if(isError){
+    return <Error />
+  }
 
   return (
     <>
