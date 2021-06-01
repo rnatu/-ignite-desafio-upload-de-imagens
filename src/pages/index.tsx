@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Button, Box } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { useInfiniteQuery } from 'react-query';
@@ -20,7 +19,7 @@ export default function Home(): JSX.Element {
   } = useInfiniteQuery(
     'images',
     // TODO AXIOS REQUEST WITH PARAM
-    async ({ pageParam = 4 }) => {
+    async ({ pageParam = 0 }) => {
       const response = await api.get(`/api/images?after=${pageParam}`);
       return response.data;
     },
@@ -32,18 +31,18 @@ export default function Home(): JSX.Element {
 
   const formattedData = useMemo(() => {
     // TODO FORMAT AND FLAT DATA ARRAY
-    const dataProcessing = data?.pages.map((page => page.data)).flat();
+    const dataProcessing = data?.pages.map(page => page.data).flat();
     return dataProcessing;
   }, [data]);
 
   // TODO RENDER LOADING SCREEN
-  if(isLoading) {
-    return <Loading />
+  if (isLoading) {
+    return <Loading />;
   }
 
   // TODO RENDER ERROR SCREEN
-  if(isError){
-    return <Error />
+  if (isError) {
+    return <Error />;
   }
 
   return (
@@ -51,8 +50,20 @@ export default function Home(): JSX.Element {
       <Header />
 
       <Box maxW={1120} px={20} mx="auto" my={20}>
-        {/* <CardList cards={formattedData} /> */}
+        <CardList cards={formattedData} />
         {/* TODO RENDER LOAD MORE BUTTON IF DATA HAS NEXT PAGE */}
+
+        {hasNextPage ? (
+          <Button onClick={() => fetchNextPage()}>
+            {isFetchingNextPage ? (
+              <span>Carregando...</span>
+            ) : (
+              <span>Carregar mais</span>
+            )}
+          </Button>
+        ) : (
+          ''
+        )}
       </Box>
     </>
   );
