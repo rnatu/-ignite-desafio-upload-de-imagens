@@ -24,7 +24,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
         lessThan10MB: value =>
           value[0].size < 10 * 1e6 || 'O arquivo deve ser menor que 10MB',
         acceptedFormats: value =>
-          value[0].type.match(/(jpeg|gif|png)/i) ||
+          /(jpeg|gif|png)/gi.test(value[0].type) ||
           'Somente são aceitos arquivos PNG, JPEG e GIF',
       },
     },
@@ -69,6 +69,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
   const { errors } = formState;
 
   const onSubmit = async (data: Record<string, unknown>): Promise<void> => {
+    console.log('ok', data);
     try {
       // TODO SHOW ERROR TOAST IF IMAGE URL DOES NOT EXISTS
       // TODO EXECUTE ASYNC MUTATION
