@@ -19,8 +19,12 @@ export default function Home(): JSX.Element {
   } = useInfiniteQuery(
     'images',
     // TODO AXIOS REQUEST WITH PARAM
-    async ({ pageParam = 0 }) => {
-      const response = await api.get(`/api/images?after=${pageParam}`);
+    async ({ pageParam = null }) => {
+      const response = await api.get(`api/images`, {
+        params: {
+          after: pageParam,
+        },
+      });
       return response.data;
     },
     // TODO GET AND RETURN NEXT PAGE PARAM
@@ -36,14 +40,10 @@ export default function Home(): JSX.Element {
   }, [data]);
 
   // TODO RENDER LOADING SCREEN
-  if (isLoading) {
-    return <Loading />;
-  }
+  if (isLoading) return <Loading />;
 
   // TODO RENDER ERROR SCREEN
-  if (isError) {
-    return <Error />;
-  }
+  if (isError) return <Error />;
 
   return (
     <>
@@ -54,7 +54,7 @@ export default function Home(): JSX.Element {
         {/* TODO RENDER LOAD MORE BUTTON IF DATA HAS NEXT PAGE */}
 
         {hasNextPage ? (
-          <Button onClick={() => fetchNextPage()}>
+          <Button mt="40px" onClick={() => fetchNextPage()}>
             {isFetchingNextPage ? (
               <span>Carregando...</span>
             ) : (
